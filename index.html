@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREvehNiVNKFRtzyHU7we2xsEMnIm94t4Q6_CgPMfshOQ&amp;s=10" />
+    <title>
+      SAITH REHMAN STUDIO — AI Studio
+    </title>
+    <meta name="description" content="SAITH REHMAN STUDIO — Created by SAITH REHMAN ALI. Download AI Studio, Buy Pro with Games, Chat with LLM." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <style>
+      /* ================= BASE ================= */
+  :root{
+    --black:#050506;
+    --black-2:#0b0b0e;
+    --card:#101014;
+    --red:#ff1e2d;
+    --red-2:#ff4d5a;
+    --red-dark:#8b0a13;
+    --text:#f2f2f5;
+    --muted:#8b8b96;
+    --border:rgba(255,30,45,.22);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:&#39;Inter&#39;,system-ui,-apple-system,sans-serif;
+    background:var(--black);
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ================= BACKGROUND FX ================= */
+  .bg-layer{
+    position:fixed;
+    inset:0;
+    z-index:-3;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,30,45,.18), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(255,30,45,.14), transparent 50%),
+      radial-gradient(circle at 50% 50%, #0d0d11 0%, #050506 70%);
+  }
+
+  .grid-overlay{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background-image:
+      linear-gradient(rgba(255,30,45,.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,30,45,.055) 1px, transparent 1px);
+    background-size:56px 56px;
+    mask-image:radial-gradient(ellipse 70% 65% at 50% 45%, #000 30%, transparent 78%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 65% at 50% 45%, #000 30%, transparent 78%);
+    animation:gridDrift 22s linear infinite;
+  }
+
+  @keyframes gridDrift{
+    from{background-position:0 0, 0 0;}
+    to{background-position:56px 56px, 56px 56px;}
+  }
+
+  .orb{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(90px);
+    z-index:-1;
+    pointer-events:none;
+    opacity:.55;
+  }
+  .orb-1{
+    width:420px;height:420px;
+    background:radial-gradient(circle,#ff1e2d,transparent 70%);
+    top:-140px;left:-120px;
+    animation:float1 14s ease-in-out infinite;
+  }
+  .orb-2{
+    width:380px;height:380px;
+    background:radial-gradient(circle,#c1001a,transparent 70%);
+    bottom:-150px;right:-120px;
+    animation:float2 17s ease-in-out infinite;
+  }
+
+  @keyframes float1{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(60px,50px) scale(1.15);}
+  }
+  @keyframes float2{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(-55px,-45px) scale(1.12);}
+  }
+
+  /* Noise texture */
+  body::after{
+    content:&#34;&#34;;
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    opacity:.035;
+    background-image:url(&#34;data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;200&#39; height=&#39;200&#39;%3E%3Cfilter id=&#39;n&#39;%3E%3CfeTurbulence type=&#39;fractalNoise&#39; baseFrequency=&#39;0.85&#39; numOctaves=&#39;3&#39;/%3E%3C/filter%3E%3Crect width=&#39;200&#39; height=&#39;200&#39; filter=&#39;url(%23n)&#39;/%3E%3C/svg%3E&#34;);
+  }
+
+  /* ================= LAYOUT ================= */
+  .wrap{
+    flex:1;
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:clamp(28px,6vw,64px) clamp(18px,5vw,32px) 40px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+
+  /* ================= TOP BADGE ================= */
+  .topbar{
+    display:flex;
+    justify-content:center;
+    margin-bottom:clamp(26px,5vw,42px);
+    animation:fadeDown .8s cubic-bezier(.2,.8,.3,1) both;
+  }
+
+  .status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:8px 18px;
+    border-radius:100px;
+    background:rgba(255,30,45,.07);
+    border:1px solid var(--border);
+    font-size:11.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:#ffb3b8;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+
+  .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 0 0 rgba(255,30,45,.8);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(255,30,45,.7);}
+    70%{box-shadow:0 0 0 11px rgba(255,30,45,0);}
+    100%{box-shadow:0 0 0 0 rgba(255,30,45,0);}
+  }
+
+  /* ================= LOGO ================= */
+  .logo-block{
+    text-align:center;
+    margin-bottom:clamp(24px,5vw,38px);
+    animation:fadeUp .9s cubic-bezier(.2,.8,.3,1) .05s both;
+  }
+
+  .logo-mark{
+    width:88px;height:88px;
+    margin:0 auto 22px;
+    border-radius:24px;
+    display:grid;place-items:center;
+    position:relative;
+    background:linear-gradient(145deg,#1a0508,#0a0a0d 60%);
+    border:1px solid rgba(255,30,45,.4);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.03) inset,
+      0 18px 50px -14px rgba(255,30,45,.55),
+      0 0 70px -22px rgba(255,30,45,.8);
+    font-family:&#39;Orbitron&#39;,sans-serif;
+    font-weight:900;
+    font-size:30px;
+    letter-spacing:-1px;
+    color:#fff;
+    text-shadow:0 0 22px rgba(255,30,45,.9);
+    animation:logoFloat 6s ease-in-out infinite;
+  }
+
+  .logo-mark::before{
+    content:&#34;&#34;;
+    position:absolute;inset:-2px;
+    border-radius:26px;
+    background:conic-gradient(from 0deg, transparent 0%, rgba(255,30,45,.85) 25%, transparent 50%, rgba(255,30,45,.6) 75%, transparent 100%);
+    z-index:-1;
+    filter:blur(7px);
+    animation:spin 7s linear infinite;
+  }
+
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes logoFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
+
+  h1{
+    font-family:&#39;Orbitron&#39;,sans-serif;
+    font-weight:900;
+    font-size:clamp(27px,7vw,46px);
+    line-height:1.06;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    background:linear-gradient(180deg,#ffffff 25%, #ff5b66 65%, #b3000e 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 30px rgba(255,30,45,.35));
+  }
+
+  .subtitle{
+    margin-top:14px;
+    font-size:clamp(12px,3.2vw,14px);
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:500;
+  }
+
+  .subtitle b{
+    color:#ff4d5a;
+    font-weight:700;
+    letter-spacing:.16em;
+  }
+
+  /* ================= BUTTONS ================= */
+  .buttons{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-top:clamp(28px,6vw,44px);
+  }
+
+  .btn{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    width:100%;
+    padding:18px 22px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.07);
+    background:linear-gradient(160deg, rgba(22,22,27,.92), rgba(10,10,13,.92));
+    color:var(--text);
+    text-decoration:none;
+    cursor:pointer;
+    overflow:hidden;
+    font-family:inherit;
+    transition:transform .3s cubic-bezier(.2,.8,.3,1),
+               border-color .3s,
+               box-shadow .3s,
+               background .3s;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    opacity:0;
+    animation:fadeUp .8s cubic-bezier(.2,.8,.3,1) both;
+  }
+
+  .btn:nth-child(1){animation-delay:.18s;}
+  .btn:nth-child(2){animation-delay:.28s;}
+  .btn:nth-child(3){animation-delay:.38s;}
+
+  /* shimmer sweep */
+  .btn::after{
+    content:&#34;&#34;;
+    position:absolute;
+    top:0;left:-140%;
+    width:70%;height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.14), transparent);
+    transform:skewX(-22deg);
+    transition:left .75s cubic-bezier(.2,.8,.3,1);
+    pointer-events:none;
+  }
+  .btn:hover::after{left:150%;}
+
+  .btn:hover{
+    transform:translateY(-3px);
+    border-color:var(--border);
+    box-shadow:0 22px 48px -20px rgba(255,30,45,.55);
+  }
+  .btn:active{transform:translateY(-1px) scale(.99);}
+
+  /* Icon */
+  .btn-icon{
+    flex-shrink:0;
+    width:46px;height:46px;
+    border-radius:13px;
+    display:grid;place-items:center;
+    background:rgba(255,30,45,.09);
+    border:1px solid rgba(255,30,45,.22);
+    color:var(--red-2);
+    transition:all .3s cubic-bezier(.2,.8,.3,1);
+  }
+  .btn-icon svg{width:21px;height:21px;}
+
+  .btn:hover .btn-icon{
+    background:var(--red);
+    border-color:var(--red);
+    color:#fff;
+    box-shadow:0 0 24px rgba(255,30,45,.65);
+    transform:scale(1.06) rotate(-4deg);
+  }
+
+  /* Text */
+  .btn-text{flex:1;min-width:0;text-align:left;}
+
+  .btn-title{
+    display:block;
+    font-size:15.5px;
+    font-weight:700;
+    letter-spacing:.02em;
+    margin-bottom:3px;
+    color:#fff;
+  }
+
+  .btn-desc{
+    display:block;
+    font-size:11.8px;
+    color:var(--muted);
+    letter-spacing:.04em;
+    font-weight:400;
+  }
+
+  /* Arrow */
+  .btn-arrow{
+    flex-shrink:0;
+    color:#5a5a66;
+    transition:all .3s cubic-bezier(.2,.8,.3,1);
+  }
+  .btn-arrow svg{width:18px;height:18px;}
+  .btn:hover .btn-arrow{
+    color:var(--red-2);
+    transform:translateX(4px);
+  }
+
+  /* ---- PRIMARY (Download) ---- */
+  .btn-primary{
+    background:linear-gradient(135deg, #ff1e2d 0%, #b3000e 100%);
+    border-color:rgba(255,90,100,.55);
+    box-shadow:0 16px 44px -16px rgba(255,30,45,.7), 0 0 0 1px rgba(255,255,255,.06) inset;
+  }
+  .btn-primary .btn-icon{
+    background:rgba(0,0,0,.28);
+    border-color:rgba(255,255,255,.28);
+    color:#fff;
+  }
+  .btn-primary .btn-title{color:#fff;}
+  .btn-primary .btn-desc{color:rgba(255,255,255,.82);}
+  .btn-primary .btn-arrow{color:rgba(255,255,255,.85);}
+  .btn-primary:hover{
+    box-shadow:0 26px 60px -18px rgba(255,30,45,.95), 0 0 0 1px rgba(255,255,255,.12) inset;
+    border-color:rgba(255,140,148,.85);
+  }
+  .btn-primary:hover .btn-icon{
+    background:#fff;
+    color:#d1000f;
+    border-color:#fff;
+    box-shadow:0 0 28px rgba(255,255,255,.55);
+  }
+  .btn-primary:hover .btn-arrow{color:#fff;}
+
+  /* ---- PRO (WhatsApp) ---- */
+  .btn-pro:hover{
+    border-color:rgba(37,211,102,.55);
+    box-shadow:0 22px 48px -20px rgba(37,211,102,.45);
+  }
+  .btn-pro:hover .btn-icon{
+    background:#25d366;
+    border-color:#25d366;
+    color:#000;
+    box-shadow:0 0 26px rgba(37,211,102,.75);
+  }
+  .btn-pro .badge-pro{
+    display:inline-block;
+    margin-left:8px;
+    padding:2px 8px;
+    font-size:9.5px;
+    font-weight:800;
+    letter-spacing:.12em;
+    border-radius:6px;
+    background:linear-gradient(135deg,#ffb800,#ff7b00);
+    color:#1a1000;
+    vertical-align:middle;
+    text-transform:uppercase;
+  }
+
+  /* ---- LLM ---- */
+  .btn-llm:hover{
+    border-color:rgba(120,120,255,.5);
+    box-shadow:0 22px 48px -20px rgba(110,90,255,.45);
+  }
+  .btn-llm:hover .btn-icon{
+    background:linear-gradient(135deg,#7b5cff,#ff1e2d);
+    border-color:transparent;
+    color:#fff;
+    box-shadow:0 0 26px rgba(140,90,255,.7);
+  }
+
+  /* ================= FOOTER ================= */
+  footer{
+    margin-top:clamp(34px,7vw,54px);
+    padding-top:24px;
+    border-top:1px solid rgba(255,255,255,.055);
+    text-align:center;
+    animation:fadeUp .9s cubic-bezier(.2,.8,.3,1) .48s both;
+  }
+
+  .footer-line{
+    font-size:11.5px;
+    color:#5c5c68;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    line-height:2;
+  }
+  .footer-line b{
+    color:#ff4d5a;
+    font-weight:700;
+    letter-spacing:.14em;
+  }
+  .footer-small{
+    margin-top:8px;
+    font-size:10.5px;
+    color:#3d3d47;
+    letter-spacing:.1em;
+  }
+
+  /* ================= ANIMATIONS ================= */
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(26px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes fadeDown{
+    from{opacity:0;transform:translateY(-18px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms!important;
+      animation-iteration-count:1!important;
+      transition-duration:.01ms!important;
+    }
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width:420px){
+    .btn{padding:15px 16px;gap:13px;border-radius:16px;}
+    .btn-icon{width:42px;height:42px;border-radius:12px;}
+    .btn-title{font-size:14.5px;}
+    .btn-desc{font-size:11px;}
+    .logo-mark{width:74px;height:74px;font-size:26px;border-radius:21px;}
+  }
+    </style>
+  </head>
+  <body>
+    <div class="bg-layer">
+    </div>
+    <div class="grid-overlay">
+    </div>
+    <div class="orb orb-1">
+    </div>
+    <div class="orb orb-2">
+    </div>
+    <main class="wrap">
+      <!-- STATUS -->
+      <div class="topbar">
+        <span class="status-pill">        <span class="dot"></span>
+        System Online — v1.0.0
+</span>
+      </div>
+      <!-- LOGO + TITLE -->
+      <div class="logo-block">
+        <div class="logo-mark">
+          SR
+        </div>
+        <h1>
+          Saith Rehman
+          <br />
+          Studio
+        </h1>
+        <p class="subtitle">
+          Created by
+          <b>          Saith Rehman Ali
+</b>
+        </p>
+      </div>
+      <!-- ACTION BUTTONS -->
+      <div class="buttons">
+        <!-- 1. DOWNLOAD -->
+        <a class="btn btn-primary" download="" href="https://github.com/muhammadtaqi512q-oss/JAZAIB-AI/releases/download/v1.0.0/AI.STUDIO.apk" rel="noopener">        <span class="btn-icon" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12">
+          </path>
+          <path d="m7 12 5 5 5-5">
+          </path>
+          <path d="M4 19h16">
+          </path>
+        </svg>
+</span>
+        <span class="btn-text">        <span class="btn-title">        Download AI Studio
+</span>
+        <span class="btn-desc">        Free APK · Android · Latest Version
+</span>
+</span>
+        <span class="btn-arrow" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14">
+          </path>
+          <path d="m13 6 6 6-6 6">
+          </path>
+        </svg>
+</span>
+</a>
+        <!-- 2. BUY PRO (WhatsApp) -->
+        <a class="btn btn-pro" href="https://wa.me/923434231908?text=Assalam%20o%20Alaikum!%20Mujhe%20AI%20Studio%20PRO%20%28with%20Games%29%20khareedna%20hai.%20Please%20guide%20karein." rel="noopener noreferrer" target="_blank">        <span class="btn-icon" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z">
+          </path>
+        </svg>
+</span>
+        <span class="btn-text">        <span class="btn-title">        Buy Pro AI Studio
+        <span class="badge-pro">        Games
+</span>
+</span>
+        <span class="btn-desc">        Unlock all games · Order on WhatsApp
+</span>
+</span>
+        <span class="btn-arrow" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14">
+          </path>
+          <path d="m13 6 6 6-6 6">
+          </path>
+        </svg>
+</span>
+</a>
+        <!-- 3. CHAT WITH LLM -->
+        <a class="btn btn-llm" href="https://nexura-m.github.io/1/vibe" rel="noopener noreferrer" target="_blank">        <span class="btn-icon" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+          </path>
+          <path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01">
+          </path>
+        </svg>
+</span>
+        <span class="btn-text">        <span class="btn-title">        Chat with LLM
+</span>
+        <span class="btn-desc">        Talk with companies· Free &amp; instant
+</span>
+</span>
+        <span class="btn-arrow" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14">
+          </path>
+          <path d="m13 6 6 6-6 6">
+          </path>
+        </svg>
+</span>
+</a>
+        <!-- 4. CHAT WITH LLM -->
+        <a class="btn btn-llm" href="https://github.com/muhammadtaqi512q-oss/JAZAIB-AI/releases/download/v1.0.0/CARROM.apk" rel="noopener noreferrer" target="_blank">        <span class="btn-icon" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+          </path>
+          <path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01">
+          </path>
+        </svg>
+</span>
+        <span class="btn-text">        <span class="btn-title">        Download CARROM GAME.
+</span>
+        <span class="btn-desc">        PLAY GAME TOTALY OFFLINE WITH YOUR AI assistant AND VS FRIEND· Free &amp; instant
+</span>
+</span>
+        <span class="btn-arrow" aria-hidden="true">        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14">
+          </path>
+          <path d="m13 6 6 6-6 6">
+          </path>
+        </svg>
+</span>
+</a>
+      </div>
+      <!-- FOOTER -->
+      <footer>
+        <p class="footer-line">
+          Created by
+          <b>          Saith Rehman Ali
+</b>
+        </p>
+        <p class="footer-small">
+          ©
+          <span id="year">          2025
+</span>
+          SAITH REHMAN STUDIO · All Rights Reserved
+        </p>
+      </footer>
+    </main>
+    <script>
+      /* Auto year */
+  document.getElementById(&#39;year&#39;).textContent = new Date().getFullYear();
+
+  /* Subtle pointer-tracking glow on buttons */
+  const canHover = window.matchMedia(&#39;(hover: hover)&#39;).matches;
+  if (canHover) {
+    document.querySelectorAll(&#39;.btn&#39;).forEach(btn =&gt; {
+      btn.addEventListener(&#39;mousemove&#39;, e =&gt; {
+        const r = btn.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top) / r.height) * 100;
+        btn.style.backgroundImage =
+          `radial-gradient(circle at ${x}% ${y}%, rgba(255,30,45,.18), transparent 55%)`;
+      });
+      btn.addEventListener(&#39;mouseleave&#39;, () =&gt; {
+        btn.style.backgroundImage = &#39;&#39;;
+      });
+    });
+  }
+    </script>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&#34;version&#34;:&#34;2024.11.0&#34;,&#34;token&#34;:&#34;e3c1c9af36de41759418005494a48906&#34;,&#34;r&#34;:1,&#34;spa&#34;:2}" crossorigin="anonymous">
+    </script>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&#34;version&#34;:&#34;2024.11.0&#34;,&#34;token&#34;:&#34;e3c1c9af36de41759418005494a48906&#34;,&#34;r&#34;:1,&#34;spa&#34;:2}" crossorigin="anonymous">
+    </script>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&#34;version&#34;:&#34;2024.11.0&#34;,&#34;token&#34;:&#34;e3c1c9af36de41759418005494a48906&#34;,&#34;r&#34;:1,&#34;spa&#34;:2}" crossorigin="anonymous">
+    </script>
+  </body>
+</html>
